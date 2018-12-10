@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 맵핑될 DAO 인터페이스의 Full name 을 줍니다. -->
+<mapper namespace="com.tistory.pentode.service.dao.BoardDAO">
+
+	<!-- id 속성은 DAO 의 메소드와 같아야 한다. 여기의 boardVO 는 mybatis-confg.xml 에 Alias 되어 있습니다. -->
+	<select id="selectBoardList" resultType="boardVO"> 
+	SELECT NUM
+	     , NAME
+	     , TITLE
+	     , CONTENT
+	     , READ_COUNT
+	     , WRITE_DATE 
+	  FROM TB_BOARD 
+	 ORDER BY NUM DESC
+	</select>
+	
+	<insert id="insertBoard">
+	<selectKey resultType="int" keyProperty="num" order="BEFORE">
+        SELECT NVL(MAX(num),0)+1 FROM TB_BOARD
+    </selectKey>  
+	INSERT INTO TB_BOARD (
+	  NUM, NAME, TITLE, CONTENT, READ_COUNT, WRITE_DATE
+	 ) VALUES (
+	  #{num}, #{name}, #{title}, #{content}, 0, SYSDATE
+	 )
+	</insert>
+</mapper>
